@@ -1,0 +1,22 @@
+{
+  "name": "rasofiagames.radataholder",
+  "displayName": "RaDataHolder",
+  "version": "1.0.0",
+  "unity": "2019.4",
+  "description": "A simple set of base classes which handles the setting and clearing of data for more secure and clean code structure while working in D.R.Y. code",
+  "keywords": [
+    "Data",
+    "Initialization",
+    "Deinitialization",
+    "View",
+    "Systems",
+    "Lifecycle",
+    "Management",
+    "Memory",
+    "Extension"
+  ],
+  "author": {
+    "name": "Rasofia Games"
+  },
+  "type": "tool"
+}
