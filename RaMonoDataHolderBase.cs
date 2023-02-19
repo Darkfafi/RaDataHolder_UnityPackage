@@ -41,9 +41,13 @@ namespace RaDataHolder
 
 			_isDestroyed = true;
 
-			OnClearData();
-			OnDispose();
+			DataDisplayedEvent = null;
+			DataClearedEvent = null;
 
+			_core.ClearData();
+			
+			OnDispose();
+			
 			_core.Dispose();
 			_core = null;
 

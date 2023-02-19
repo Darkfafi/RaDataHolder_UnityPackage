@@ -10,6 +10,8 @@ namespace RaDataHolder
 
 		private RaDataHolderCore<TData> _core = null;
 
+		private bool _isDestroyed = false;
+
 		public bool HasData => _core != null && _core.HasData;
 
 		protected TData Data
@@ -58,7 +60,18 @@ namespace RaDataHolder
 
 		public void Dispose()
 		{
-			OnClearData();
+			if(_isDestroyed)
+			{
+				return;
+			}
+
+			_isDestroyed = true;
+
+			DataDisplayedEvent = null;
+			DataClearedEvent = null;
+
+			_core.ClearData();
+			
 			OnDispose();
 
 			_core.Dispose();
