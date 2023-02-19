@@ -23,11 +23,11 @@ namespace RaDataHolder
 			(core) =>
 			{
 				Data = core.Data;
-				OnDisplay();
+				OnSetData();
 			},
 			(core) =>
 			{
-				OnClear();
+				OnClearData();
 				Data = default;
 			});
 
@@ -58,17 +58,17 @@ namespace RaDataHolder
 
 		public void Dispose()
 		{
+			OnClearData();
+			OnDispose();
+
 			_core.Dispose();
 			_core = null;
-
-			OnClear();
-			OnDispose();
 
 			Data = default;
 		}
 
-		protected abstract void OnDisplay();
-		protected abstract void OnClear();
+		protected abstract void OnSetData();
+		protected abstract void OnClearData();
 
 		protected virtual void OnDispose()
 		{
