@@ -1,12 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace RaDataHolder
 {
 	public abstract class RaMonoDataHolderBase<TData> : MonoBehaviour, IRaDataHolder<TData>
 	{
 		public delegate void DataHandler(RaMonoDataHolderBase<TData> holder);
-		public event DataHandler DataDisplayedEvent;
+		public event DataHandler DataSetEvent;
 		public event DataHandler DataClearedEvent;
+		public event DataHandler DataSetResolvedEvent;
+		public event DataHandler DataClearResolvedEvent;
 
 		private bool _isDestroyed = false;
 
@@ -41,8 +44,10 @@ namespace RaDataHolder
 
 			_isDestroyed = true;
 
-			DataDisplayedEvent = null;
+			DataSetEvent = null;
 			DataClearedEvent = null;
+			DataSetResolvedEvent = null;
+			DataClearResolvedEvent = null;
 
 			_core.ClearData();
 			
@@ -71,43 +76,89 @@ namespace RaDataHolder
 			{
 				OnClearData();
 				Data = default;
+			},
+			(core)=> 
+			{
+				OnSetDataResolved();
+			}, 
+			(core)=> 
+			{
+				OnClearDataResolved();
 			});
 
-			_core.DataDisplayedEvent += OnDataDisplayedEvent;
+			_core.DataSetEvent += OnDataSetEvent;
 			_core.DataClearedEvent += OnDataClearedEvent;
+			_core.DataSetResolvedEvent += OnDataSetResolvedEvent;
+			_core.DataClearResolvedEvent += OnDataClearResolvedEvent;
 		}
 
-		public void SetData(TData data)
+		public IRaDataSetResolver SetData(TData data)
 		{
 			Core.SetData(data);
+			return this;
 		}
 
-		public void SetData(object data)
+		public IRaDataSetResolver SetRawData(object data)
 		{
-			Core.SetData(data);
+			Core.SetRawData(data);
+			return this;
 		}
 
-		public void ClearData()
+		public IRaDataClearResolver ClearData()
 		{
 			Core.ClearData();
+			return this;
 		}
 
 		protected abstract void OnSetData();
+		
 		protected abstract void OnClearData();
+
+		protected virtual void OnSetDataResolved()
+		{
+
+		}
+
+		protected virtual void OnClearDataResolved()
+		{
+		
+		}
 
 		protected virtual void OnDispose()
 		{
 
 		}
 
-		private void OnDataDisplayedEvent(RaDataHolderCore<TData> core)
+		private void OnDataSetEvent(RaDataHolderCore<TData> core)
 		{
-			DataDisplayedEvent?.Invoke(this);
+			DataSetEvent?.Invoke(this);
 		}
 
 		private void OnDataClearedEvent(RaDataHolderCore<TData> core)
 		{
 			DataClearedEvent?.Invoke(this);
+		}
+
+		private void OnDataSetResolvedEvent(RaDataHolderCore<TData> core)
+		{
+			DataSetResolvedEvent?.Invoke(this);
+		}
+
+		private void OnDataClearResolvedEvent(RaDataHolderCore<TData> core)
+		{
+			DataClearResolvedEvent?.Invoke(this);
+		}
+
+		IRaDataSetResolver IRaDataSetResolver.Resolve()
+		{
+			((IRaDataSetResolver)Core).Resolve();
+			return this;
+		}
+
+		IRaDataClearResolver IRaDataClearResolver.Resolve()
+		{
+			((IRaDataClearResolver)Core).Resolve();
+			return this;
 		}
 	}
 }

@@ -1,6 +1,11 @@
-# Changelog RaCollection
+# Changelog RaDataHolder
 
-## v1.1.0 - 19/02/2023
+## v1.2.0 - 03/03/2023
+* Added Resolve functionality for Set & Clear Data
+* Renamed SetData with parameter object to SetRawData to not have the fallback cause runtime issues during a refactor
+* Changed ClearData Event send logics
+
+## v1.1.1 - 19/02/2023
 * Renamed OnDisplay to OnSetData & OnClear to OnClearData + Corrected Dispose order
 
 ## v1.0.0 - 02/02/2023

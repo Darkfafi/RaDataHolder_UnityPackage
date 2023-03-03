@@ -6,12 +6,19 @@ namespace RaDataHolder
 	{
 		public delegate void DataHandler(RaDataHolderCore<TData> core);
 
-		public event DataHandler DataDisplayedEvent;
+		public event DataHandler DataSetEvent;
 		public event DataHandler DataClearedEvent;
+		public event DataHandler DataSetResolvedEvent;
+		public event DataHandler DataClearResolvedEvent;
 
 		private State _state = State.None;
-		private DataHandler _displayLogics;
+		private ResolveState _resolveState = ResolveState.None;
+		
+		private DataHandler _setLogics;
 		private DataHandler _clearLogics;
+
+		private DataHandler _setResolveLogics;
+		private DataHandler _clearResolveLogics;
 
 		public bool HasData => _state == State.Displaying;
 
@@ -20,17 +27,20 @@ namespace RaDataHolder
 			get; private set;
 		}
 
-		public RaDataHolderCore(DataHandler displayLogics, DataHandler clearLogics)
+		public RaDataHolderCore(DataHandler setLogics, DataHandler clearLogics, DataHandler setResolveLogics, DataHandler clearResolveLogics)
 		{
-			_displayLogics = displayLogics;
+			_setLogics = setLogics;
 			_clearLogics = clearLogics;
+			_setResolveLogics = setResolveLogics;
+			_clearResolveLogics = clearResolveLogics;
 		}
 
-		public void SetData(object data)
+		public IRaDataSetResolver SetRawData(object data)
 		{
 			if(data is TData castedData)
 			{
 				SetData(castedData);
+				return this;
 			}
 			else
 			{
@@ -38,48 +48,102 @@ namespace RaDataHolder
 			}
 		}
 
-		public void SetData(TData data)
+		public IRaDataSetResolver SetData(TData data)
 		{
 			if(_state != State.None)
 			{
-				return;
+				return this;
 			}
 
 			_state = State.Assembling;
 			Data = data;
 
-			_displayLogics?.Invoke(this);
+			_setLogics?.Invoke(this);
 
+			_resolveState = ResolveState.AwaitSet;
 			_state = State.Displaying;
 
-			DataDisplayedEvent?.Invoke(this);
+			DataSetEvent?.Invoke(this);
+			return this;
 		}
 
-		public void ClearData()
+		public IRaDataClearResolver ClearData()
 		{
 			if(_state != State.Displaying)
 			{
-				return;
+				return this;
 			}
 
 			_state = State.Disassembling;
 
 			_clearLogics?.Invoke(this);
-			DataClearedEvent?.Invoke(this);
-
-			Data = default;
+			
+			_resolveState = ResolveState.AwaitClear;
 			_state = State.None;
+
+			DataClearedEvent?.Invoke(this);
+			Data = default;
+			return this;
 		}
 
 		public void Dispose()
 		{
-			DataDisplayedEvent = null;
+			DataSetEvent = null;
 			DataClearedEvent = null;
+
+			DataSetResolvedEvent = null;
+			DataClearResolvedEvent = null;
+
 			Data = default;
 			_state = default;
+			_resolveState = default;
 
 			_clearLogics = default;
-			_displayLogics = default;
+			_setLogics = default;
+
+			_clearResolveLogics = default;
+			_setResolveLogics = default;
+		}
+
+		IRaDataSetResolver IRaDataSetResolver.Resolve()
+		{
+			if(_resolveState != ResolveState.AwaitSet)
+			{
+				return this;
+			}
+
+			_resolveState = ResolveState.Set;
+			_setResolveLogics?.Invoke(this);
+			DataSetResolvedEvent?.Invoke(this);
+
+			return this;
+		}
+
+		IRaDataClearResolver IRaDataClearResolver.Resolve()
+		{
+			if(_resolveState != ResolveState.AwaitClear)
+			{
+				return this;
+			}
+
+			_resolveState = ResolveState.Clear;
+			_clearResolveLogics?.Invoke(this);
+			DataClearResolvedEvent?.Invoke(this);
+
+			return this;
+		}
+
+		private enum ResolveState
+		{
+			None,
+
+			// Set
+			AwaitSet,
+			Set,
+
+			// Clear
+			AwaitClear,
+			Clear,
 		}
 
 		private enum State
