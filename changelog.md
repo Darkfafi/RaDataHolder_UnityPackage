@@ -1,5 +1,10 @@
 # Changelog RaDataHolder
 
+## v1.3.1 - 04/03/2023
+* Linked Resolve events to the RaDataHolderBase
+* Made the Resolve functionality 
+* Made it so the DataHolder channel class' Resolve automatically refers to the SetData Resolve, without requiring an interface cast 
+
 ## v1.3.0 - 04/03/2023
 * Made Resolve logics the main part of setting data by introducing it as a non-optional parameter
 * Made it so the DataHolder class' Resolve automatically refers to the SetData Resolve, without requiring an interface cast

@@ -45,6 +45,8 @@ namespace RaDataHolder
 
 			_core.DataSetEvent += OnDataDisplayedEvent;
 			_core.DataClearedEvent += OnDataClearedEvent;
+			_core.DataSetResolvedEvent += OnDataSetResolvedEvent;
+			_core.DataClearResolvedEvent += OnDataClearResolvedEvent;
 		}
 
 		public RaDataHolderBase(TData data, bool resolve)
@@ -80,10 +82,10 @@ namespace RaDataHolder
 
 			_isDestroyed = true;
 
-			DataSetEvent = null;
-			DataClearedEvent = null;
 			DataSetResolvedEvent = null;
 			DataClearResolvedEvent = null;
+			DataSetEvent = null;
+			DataClearedEvent = null;
 
 			_core.ClearData(true);
 			
@@ -133,7 +135,7 @@ namespace RaDataHolder
 			DataClearResolvedEvent?.Invoke(this);
 		}
 
-		IRaDataSetResolver IRaDataSetResolver.Resolve()
+		public IRaDataSetResolver Resolve()
 		{
 			((IRaDataSetResolver)_core).Resolve();
 			return this;

@@ -148,7 +148,7 @@ namespace RaDataHolder
 			DataClearResolvedEvent?.Invoke(this);
 		}
 
-		IRaDataSetResolver IRaDataSetResolver.Resolve()
+		public IRaDataSetResolver Resolve()
 		{
 			((IRaDataSetResolver)Core).Resolve();
 			return this;

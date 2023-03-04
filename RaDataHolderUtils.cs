@@ -18,7 +18,7 @@ namespace RaDataHolder
 
 		public static void ResolveAll(this IList<IRaDataClearResolver> group)
 		{
-			for(int i = group.Count - 1; i >= 0; i--)
+			for(int i = 0, c = group.Count; i < c; i++)
 			{
 				IRaDataClearResolver entry = group[i];
 				if(entry != null)
