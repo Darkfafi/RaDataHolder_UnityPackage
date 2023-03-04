@@ -8,7 +8,7 @@
 		}
 
 		IRaDataSetResolver SetRawData(object data, bool resolve);
-		IRaDataClearResolver ClearData(bool resolve);
+		IRaDataClearResolver ClearData(bool resolve = true);
 	}
 
 	public interface IRaDataHolder<TData> : IRaDataHolder

@@ -65,7 +65,7 @@ namespace RaDataHolder
 			return this;
 		}
 
-		public IRaDataClearResolver ClearData(bool resolve)
+		public IRaDataClearResolver ClearData(bool resolve = true)
 		{
 			_core.ClearData(resolve);
 			return this;

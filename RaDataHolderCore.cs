@@ -73,7 +73,7 @@ namespace RaDataHolder
 			return this;
 		}
 
-		public IRaDataClearResolver ClearData(bool resolve)
+		public IRaDataClearResolver ClearData(bool resolve = true)
 		{
 			if(_state != State.Displaying)
 			{
