@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RaDataHolder
 {
@@ -49,7 +48,7 @@ namespace RaDataHolder
 			DataSetResolvedEvent = null;
 			DataClearResolvedEvent = null;
 
-			_core.ClearData();
+			_core.ClearData(true);
 			
 			OnDispose();
 			
@@ -92,21 +91,21 @@ namespace RaDataHolder
 			_core.DataClearResolvedEvent += OnDataClearResolvedEvent;
 		}
 
-		public IRaDataSetResolver SetData(TData data)
+		public IRaDataSetResolver SetData(TData data, bool resolve)
 		{
-			Core.SetData(data);
+			Core.SetData(data, resolve);
 			return this;
 		}
 
-		public IRaDataSetResolver SetRawData(object data)
+		public IRaDataSetResolver SetRawData(object data, bool resolve)
 		{
-			Core.SetRawData(data);
+			Core.SetRawData(data, resolve);
 			return this;
 		}
 
-		public IRaDataClearResolver ClearData()
+		public IRaDataClearResolver ClearData(bool resolve)
 		{
-			Core.ClearData();
+			Core.ClearData(resolve);
 			return this;
 		}
 

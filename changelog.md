@@ -1,5 +1,9 @@
 # Changelog RaDataHolder
 
+## v1.3.0 - 04/03/2023
+* Made Resolve logics the main part of setting data by introducing it as a non-optional parameter
+* Made it so the DataHolder class' Resolve automatically refers to the SetData Resolve, without requiring an interface cast
+
 ## v1.2.0 - 03/03/2023
 * Added Resolve functionality for Set & Clear Data
 * Renamed SetData with parameter object to SetRawData to not have the fallback cause runtime issues during a refactor

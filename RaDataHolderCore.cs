@@ -35,11 +35,11 @@ namespace RaDataHolder
 			_clearResolveLogics = clearResolveLogics;
 		}
 
-		public IRaDataSetResolver SetRawData(object data)
+		public IRaDataSetResolver SetRawData(object data, bool resolve)
 		{
 			if(data is TData castedData)
 			{
-				SetData(castedData);
+				SetData(castedData, resolve);
 				return this;
 			}
 			else
@@ -48,7 +48,7 @@ namespace RaDataHolder
 			}
 		}
 
-		public IRaDataSetResolver SetData(TData data)
+		public IRaDataSetResolver SetData(TData data, bool resolve)
 		{
 			if(_state != State.None)
 			{
@@ -64,10 +64,16 @@ namespace RaDataHolder
 			_state = State.Displaying;
 
 			DataSetEvent?.Invoke(this);
+
+			if(resolve)
+			{
+				Resolve();
+			}
+
 			return this;
 		}
 
-		public IRaDataClearResolver ClearData()
+		public IRaDataClearResolver ClearData(bool resolve)
 		{
 			if(_state != State.Displaying)
 			{
@@ -83,6 +89,12 @@ namespace RaDataHolder
 
 			DataClearedEvent?.Invoke(this);
 			Data = default;
+
+			if(resolve)
+			{
+				((IRaDataClearResolver)this).Resolve();
+			}
+
 			return this;
 		}
 
@@ -105,7 +117,7 @@ namespace RaDataHolder
 			_setResolveLogics = default;
 		}
 
-		IRaDataSetResolver IRaDataSetResolver.Resolve()
+		public IRaDataSetResolver Resolve()
 		{
 			if(_resolveState != ResolveState.AwaitSet)
 			{

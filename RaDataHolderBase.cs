@@ -47,27 +47,27 @@ namespace RaDataHolder
 			_core.DataClearedEvent += OnDataClearedEvent;
 		}
 
-		public RaDataHolderBase(TData data)
+		public RaDataHolderBase(TData data, bool resolve)
 			: base()
 		{
-			SetData(data);
+			SetData(data, resolve);
 		}
 
-		public IRaDataSetResolver SetData(TData data)
+		public IRaDataSetResolver SetData(TData data, bool resolve)
 		{
-			_core.SetData(data);
+			_core.SetData(data, resolve);
 			return this;
 		}
 
-		public IRaDataSetResolver SetRawData(object data)
+		public IRaDataSetResolver SetRawData(object data, bool resolve)
 		{
-			_core.SetRawData(data);
+			_core.SetRawData(data, resolve);
 			return this;
 		}
 
-		public IRaDataClearResolver ClearData()
+		public IRaDataClearResolver ClearData(bool resolve)
 		{
-			_core.ClearData();
+			_core.ClearData(resolve);
 			return this;
 		}
 
@@ -85,7 +85,7 @@ namespace RaDataHolder
 			DataSetResolvedEvent = null;
 			DataClearResolvedEvent = null;
 
-			_core.ClearData();
+			_core.ClearData(true);
 			
 			OnDispose();
 
