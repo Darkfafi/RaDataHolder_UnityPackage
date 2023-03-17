@@ -1,5 +1,9 @@
 # Changelog RaDataHolder
 
+## v1.3.2 - 17/03/2023
+* Added OnInitialization method to the RaMonoDataHolderBase 
+* Renamed OnDispose to OnDeinitialization
+
 ## v1.3.1 - 04/03/2023
 * Linked Resolve events to the RaDataHolderBase
 * Made the Resolve functionality 
