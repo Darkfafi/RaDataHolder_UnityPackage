@@ -50,7 +50,7 @@ namespace RaDataHolder
 
 			_core.ClearData(true);
 			
-			OnDispose();
+			OnDeinitialization();
 			
 			_core.Dispose();
 			_core = null;
@@ -89,6 +89,8 @@ namespace RaDataHolder
 			_core.DataClearedEvent += OnDataClearedEvent;
 			_core.DataSetResolvedEvent += OnDataSetResolvedEvent;
 			_core.DataClearResolvedEvent += OnDataClearResolvedEvent;
+
+			OnInitialization();
 		}
 
 		public IRaDataSetResolver SetData(TData data, bool resolve)
@@ -120,10 +122,15 @@ namespace RaDataHolder
 
 		protected virtual void OnClearDataResolved()
 		{
-		
+
 		}
 
-		protected virtual void OnDispose()
+		protected virtual void OnInitialization()
+		{
+
+		}
+
+		protected virtual void OnDeinitialization()
 		{
 
 		}
