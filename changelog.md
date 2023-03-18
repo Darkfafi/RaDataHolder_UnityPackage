@@ -1,5 +1,9 @@
 # Changelog RaDataHolder
 
+## v1.3.3 - 18/03/2023
+* Made it so the Resolve boolean's default value is true 
+* Added Safety checks to ClearData and other calls of the RaMonoDataHolderBase, to prevent a null reference on Clear during scene destruction
+
 ## v1.3.2 - 17/03/2023
 * Added OnInitialization method to the RaMonoDataHolderBase 
 * Renamed OnDispose to OnDeinitialization
