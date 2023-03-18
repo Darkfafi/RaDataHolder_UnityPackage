@@ -49,19 +49,19 @@ namespace RaDataHolder
 			_core.DataClearResolvedEvent += OnDataClearResolvedEvent;
 		}
 
-		public RaDataHolderBase(TData data, bool resolve)
+		public RaDataHolderBase(TData data, bool resolve = true)
 			: base()
 		{
 			SetData(data, resolve);
 		}
 
-		public IRaDataSetResolver SetData(TData data, bool resolve)
+		public IRaDataSetResolver SetData(TData data, bool resolve = true)
 		{
 			_core.SetData(data, resolve);
 			return this;
 		}
 
-		public IRaDataSetResolver SetRawData(object data, bool resolve)
+		public IRaDataSetResolver SetRawData(object data, bool resolve = true)
 		{
 			_core.SetRawData(data, resolve);
 			return this;

@@ -93,21 +93,30 @@ namespace RaDataHolder
 			OnInitialization();
 		}
 
-		public IRaDataSetResolver SetData(TData data, bool resolve)
+		public IRaDataSetResolver SetData(TData data, bool resolve = true)
 		{
-			Core.SetData(data, resolve);
+			if(Core != null)
+			{
+				Core.SetData(data, resolve);
+			}
 			return this;
 		}
 
-		public IRaDataSetResolver SetRawData(object data, bool resolve)
+		public IRaDataSetResolver SetRawData(object data, bool resolve = true)
 		{
-			Core.SetRawData(data, resolve);
+			if(Core != null)
+			{
+				Core.SetRawData(data, resolve);
+			}
 			return this;
 		}
 
 		public IRaDataClearResolver ClearData(bool resolve = true)
 		{
-			Core.ClearData(resolve);
+			if(Core != null)
+			{
+				Core.ClearData(resolve);
+			}
 			return this;
 		}
 

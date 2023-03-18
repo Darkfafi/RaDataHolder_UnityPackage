@@ -35,7 +35,7 @@ namespace RaDataHolder
 			_clearResolveLogics = clearResolveLogics;
 		}
 
-		public IRaDataSetResolver SetRawData(object data, bool resolve)
+		public IRaDataSetResolver SetRawData(object data, bool resolve = true)
 		{
 			if(data is TData castedData)
 			{
@@ -48,7 +48,7 @@ namespace RaDataHolder
 			}
 		}
 
-		public IRaDataSetResolver SetData(TData data, bool resolve)
+		public IRaDataSetResolver SetData(TData data, bool resolve = true)
 		{
 			if(_state != State.None)
 			{
