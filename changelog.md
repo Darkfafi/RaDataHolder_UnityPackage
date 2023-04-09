@@ -1,5 +1,11 @@
 # Changelog RaDataHolder
 
+## v1.4.0 - 09/04/2023
+* Fully implmented ReplaceData feature 
+  * Added to RaDataHolderCore, RaDataHolderBase & RaMonoDataHolderBase
+  * Introduced new event called "DataReplacedEvent"
+  * Introduced new boolean called "IsReplacingData" which is true while data is being replaced (can be read during ClearData & SetData Callbacks / Events to determine behaviour)
+
 ## v1.3.3 - 18/03/2023
 * Made it so the Resolve boolean's default value is true 
 * Added Safety checks to ClearData and other calls of the RaMonoDataHolderBase, to prevent a null reference on Clear during scene destruction
