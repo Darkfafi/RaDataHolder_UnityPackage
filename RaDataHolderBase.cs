@@ -55,6 +55,12 @@ namespace RaDataHolder
 			SetData(data, resolve);
 		}
 
+		public void ReplaceData(TData data)
+		{
+			ClearData();
+			SetData(data);
+		}
+
 		public IRaDataSetResolver SetData(TData data, bool resolve = true)
 		{
 			_core.SetData(data, resolve);
