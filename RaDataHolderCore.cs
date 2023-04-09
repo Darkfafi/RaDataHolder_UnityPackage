@@ -1,15 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace RaDataHolder
 {
 	public class RaDataHolderCore<TData> : IRaDataHolder<TData>, IDisposable
 	{
 		public delegate void DataHandler(RaDataHolderCore<TData> core);
+		public delegate void DataChangeHandler(TData newData, TData oldData, RaDataHolderCore<TData> core);
 
 		public event DataHandler DataSetEvent;
 		public event DataHandler DataClearedEvent;
 		public event DataHandler DataSetResolvedEvent;
 		public event DataHandler DataClearResolvedEvent;
+		public event DataChangeHandler DataReplacedEvent;
 
 		private State _state = State.None;
 		private ResolveState _resolveState = ResolveState.None;
@@ -20,6 +23,8 @@ namespace RaDataHolder
 		private DataHandler _setResolveLogics;
 		private DataHandler _clearResolveLogics;
 
+		private HashSet<object> _replacingFlags;
+
 		public bool HasData => _state == State.Displaying;
 
 		public TData Data
@@ -27,8 +32,11 @@ namespace RaDataHolder
 			get; private set;
 		}
 
+		public bool IsReplacingData => _replacingFlags.Count > 0;
+
 		public RaDataHolderCore(DataHandler setLogics, DataHandler clearLogics, DataHandler setResolveLogics, DataHandler clearResolveLogics)
 		{
+			_replacingFlags = new HashSet<object>();
 			_setLogics = setLogics;
 			_clearLogics = clearLogics;
 			_setResolveLogics = setResolveLogics;
@@ -46,6 +54,41 @@ namespace RaDataHolder
 			{
 				throw new InvalidCastException($"Data passed was not of type {typeof(TData)}");
 			}
+		}
+
+		public void ReplaceData(TData data, bool ignoreOnEqual = true)
+		{
+			if(ignoreOnEqual)
+			{
+				if(Data == null && data == null)
+				{
+					return;
+				}
+
+				if(Data != null && Data.Equals(data))
+				{
+					return;
+				}
+			}
+
+			object flag = new object();
+
+			_replacingFlags.Add(flag);
+			{
+				TData oldData = Data;
+				TData newData = data;
+
+				ClearData();
+
+				if(data != null)
+				{
+					SetData(data);
+				}
+
+				DataReplacedEvent?.Invoke(newData, oldData, this);
+			}
+			_replacingFlags.Remove(flag);
+
 		}
 
 		public IRaDataSetResolver SetData(TData data, bool resolve = true)
@@ -100,6 +143,8 @@ namespace RaDataHolder
 
 		public void Dispose()
 		{
+			DataReplacedEvent = null;
+
 			DataSetEvent = null;
 			DataClearedEvent = null;
 
@@ -115,6 +160,9 @@ namespace RaDataHolder
 
 			_clearResolveLogics = default;
 			_setResolveLogics = default;
+
+			_replacingFlags.Clear();
+			_replacingFlags = default;
 		}
 
 		public IRaDataSetResolver Resolve()

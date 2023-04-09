@@ -5,16 +5,20 @@ namespace RaDataHolder
 	public abstract class RaDataHolderBase<TData> : IRaDataHolder<TData>, IDisposable
 	{
 		public delegate void DataHandler(RaDataHolderBase<TData> holder);
+		public delegate void DataChangeHandler(TData newData, TData oldData, RaDataHolderBase<TData> core);
+
 		public event DataHandler DataSetEvent;
 		public event DataHandler DataClearedEvent;
 		public event DataHandler DataSetResolvedEvent;
 		public event DataHandler DataClearResolvedEvent;
+		public event DataChangeHandler DataReplacedEvent;
 
 		private RaDataHolderCore<TData> _core = null;
 
 		private bool _isDestroyed = false;
 
 		public bool HasData => _core != null && _core.HasData;
+		public bool IsReplacingData => _core != null && _core.IsReplacingData;
 
 		protected TData Data
 		{
@@ -47,6 +51,7 @@ namespace RaDataHolder
 			_core.DataClearedEvent += OnDataClearedEvent;
 			_core.DataSetResolvedEvent += OnDataSetResolvedEvent;
 			_core.DataClearResolvedEvent += OnDataClearResolvedEvent;
+			_core.DataReplacedEvent += OnDataReplacedEvent;
 		}
 
 		public RaDataHolderBase(TData data, bool resolve = true)
@@ -55,10 +60,9 @@ namespace RaDataHolder
 			SetData(data, resolve);
 		}
 
-		public void ReplaceData(TData data)
+		public void ReplaceData(TData data, bool ignoreOnEqual = true)
 		{
-			ClearData();
-			SetData(data);
+			_core.ReplaceData(data, ignoreOnEqual);
 		}
 
 		public IRaDataSetResolver SetData(TData data, bool resolve = true)
@@ -88,6 +92,7 @@ namespace RaDataHolder
 
 			_isDestroyed = true;
 
+			DataReplacedEvent = null;
 			DataSetResolvedEvent = null;
 			DataClearResolvedEvent = null;
 			DataSetEvent = null;
@@ -139,6 +144,11 @@ namespace RaDataHolder
 		private void OnDataClearResolvedEvent(RaDataHolderCore<TData> core)
 		{
 			DataClearResolvedEvent?.Invoke(this);
+		}
+
+		private void OnDataReplacedEvent(TData newData, TData oldData, RaDataHolderCore<TData> core)
+		{
+			DataReplacedEvent?.Invoke(newData, oldData, this);
 		}
 
 		public IRaDataSetResolver Resolve()

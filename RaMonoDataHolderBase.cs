@@ -1,18 +1,24 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace RaDataHolder
 {
 	public abstract class RaMonoDataHolderBase<TData> : MonoBehaviour, IRaDataHolder<TData>
 	{
 		public delegate void DataHandler(RaMonoDataHolderBase<TData> holder);
+		public delegate void DataChangeHandler(TData newData, TData oldData, RaMonoDataHolderBase<TData> core);
+
 		public event DataHandler DataSetEvent;
 		public event DataHandler DataClearedEvent;
 		public event DataHandler DataSetResolvedEvent;
 		public event DataHandler DataClearResolvedEvent;
+		public event DataChangeHandler DataReplacedEvent;
 
 		private bool _isDestroyed = false;
 
 		public bool HasData => _core != null && _core.HasData;
+
+		public bool IsReplacingData => _core != null && _core.IsReplacingData;
 
 		protected RaDataHolderCore<TData> Core
 		{
@@ -47,6 +53,7 @@ namespace RaDataHolder
 			DataClearedEvent = null;
 			DataSetResolvedEvent = null;
 			DataClearResolvedEvent = null;
+			DataReplacedEvent = null;
 
 			_core.ClearData(true);
 			
@@ -89,6 +96,7 @@ namespace RaDataHolder
 			_core.DataClearedEvent += OnDataClearedEvent;
 			_core.DataSetResolvedEvent += OnDataSetResolvedEvent;
 			_core.DataClearResolvedEvent += OnDataClearResolvedEvent;
+			_core.DataReplacedEvent += OnDataReplacedEvent;
 
 			OnInitialization();
 		}
@@ -118,6 +126,14 @@ namespace RaDataHolder
 				Core.ClearData(resolve);
 			}
 			return this;
+		}
+
+		public void ReplaceData(TData data, bool ignoreOnEqual = true)
+		{
+			if(Core != null)
+			{
+				Core.ReplaceData(data, ignoreOnEqual);
+			}
 		}
 
 		protected abstract void OnSetData();
@@ -162,6 +178,11 @@ namespace RaDataHolder
 		private void OnDataClearResolvedEvent(RaDataHolderCore<TData> core)
 		{
 			DataClearResolvedEvent?.Invoke(this);
+		}
+
+		private void OnDataReplacedEvent(TData newData, TData oldData, RaDataHolderCore<TData> core)
+		{
+			DataReplacedEvent?.Invoke(newData, oldData, this);
 		}
 
 		public IRaDataSetResolver Resolve()
