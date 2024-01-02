@@ -101,6 +101,21 @@ namespace RaDataHolder
 			OnInitialization();
 		}
 
+		public void EditorSetData(TData data)
+		{
+			SetData(data);
+		}
+
+		public void EditorClearData()
+		{
+			ClearData();
+		}
+
+		public void EditorReplaceData(TData data)
+		{
+			ReplaceData(data, ignoreOnEqual: false);
+		}
+
 		public IRaDataSetResolver SetData(TData data, bool resolve = true)
 		{
 			if(Core != null)
