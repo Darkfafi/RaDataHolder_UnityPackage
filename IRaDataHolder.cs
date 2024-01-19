@@ -18,7 +18,7 @@
 
 	public interface IRaDataHolder<TData> : IRaDataHolder
 	{
-		void ReplaceData(TData data, bool ignoreOnEqual = true);
+		bool ReplaceData(TData data, bool ignoreOnEqual = true);
 		IRaDataSetResolver SetData(TData data, bool resolve = true);
 	}
 

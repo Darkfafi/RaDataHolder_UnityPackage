@@ -56,18 +56,18 @@ namespace RaDataHolder
 			}
 		}
 
-		public void ReplaceData(TData data, bool ignoreOnEqual = true)
+		public bool ReplaceData(TData data, bool ignoreOnEqual = true)
 		{
 			if(ignoreOnEqual)
 			{
 				if(Data == null && data == null)
 				{
-					return;
+					return false;
 				}
 
 				if(Data != null && Data.Equals(data))
 				{
-					return;
+					return false;
 				}
 			}
 
@@ -88,7 +88,7 @@ namespace RaDataHolder
 				DataReplacedEvent?.Invoke(newData, oldData, this);
 			}
 			_replacingFlags.Remove(flag);
-
+			return true;
 		}
 
 		public IRaDataSetResolver SetData(TData data, bool resolve = true)

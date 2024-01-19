@@ -60,9 +60,9 @@ namespace RaDataHolder
 			SetData(data, resolve);
 		}
 
-		public void ReplaceData(TData data, bool ignoreOnEqual = true)
+		public bool ReplaceData(TData data, bool ignoreOnEqual = true)
 		{
-			_core.ReplaceData(data, ignoreOnEqual);
+			return _core.ReplaceData(data, ignoreOnEqual);
 		}
 
 		public IRaDataSetResolver SetData(TData data, bool resolve = true)

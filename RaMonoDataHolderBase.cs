@@ -143,12 +143,13 @@ namespace RaDataHolder
 			return this;
 		}
 
-		public void ReplaceData(TData data, bool ignoreOnEqual = true)
+		public bool ReplaceData(TData data, bool ignoreOnEqual = true)
 		{
 			if(Core != null)
 			{
-				Core.ReplaceData(data, ignoreOnEqual);
+				return Core.ReplaceData(data, ignoreOnEqual);
 			}
+			return false;
 		}
 
 		protected abstract void OnSetData();
