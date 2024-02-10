@@ -45,16 +45,16 @@ namespace RaDataHolder
 
 			_isDestroyed = true;
 
+			_core.ClearData(true);
+			
+			OnDeinitialization();
+
 			DataSetEvent = null;
 			DataClearedEvent = null;
 			DataSetResolvedEvent = null;
 			DataClearResolvedEvent = null;
 			DataReplacedEvent = null;
 
-			_core.ClearData(true);
-			
-			OnDeinitialization();
-			
 			_core.Dispose();
 			_core = null;
 		}
