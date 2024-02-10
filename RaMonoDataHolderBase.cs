@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace RaDataHolder
 {
@@ -30,10 +29,7 @@ namespace RaDataHolder
 		}
 		private RaDataHolderCore<TData> _core = null;
 
-		protected TData Data
-		{
-			get; private set;
-		}
+		protected TData Data => _core != null ? _core.Data : default;
 
 		protected void Awake()
 		{
@@ -75,13 +71,11 @@ namespace RaDataHolder
 			_core = new RaDataHolderCore<TData>(
 			(core) =>
 			{
-				Data = core.Data;
 				OnSetData();
 			},
 			(core) =>
 			{
 				OnClearData();
-				Data = default;
 			},
 			(core)=> 
 			{
