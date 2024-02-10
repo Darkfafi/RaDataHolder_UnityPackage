@@ -19,6 +19,8 @@ namespace RaDataHolder
 
 		public bool IsReplacingData => _core != null && _core.IsReplacingData;
 
+		public bool IsDestroyed => _isDestroyed;
+
 		protected RaDataHolderCore<TData> Core
 		{
 			get
