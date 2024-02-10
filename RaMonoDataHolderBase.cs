@@ -57,8 +57,6 @@ namespace RaDataHolder
 			
 			_core.Dispose();
 			_core = null;
-
-			Data = default;
 		}
 
 		private void TryInitialize()
