@@ -65,7 +65,7 @@ namespace RaDataHolder
 					return false;
 				}
 
-				if(Data != null && Data.Equals(data))
+				if(HasData && Data.Equals(data))
 				{
 					return false;
 				}
