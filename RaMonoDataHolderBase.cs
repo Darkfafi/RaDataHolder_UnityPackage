@@ -33,6 +33,12 @@ namespace RaDataHolder
 
 		protected TData Data => _core != null ? _core.Data : default;
 
+		public void Reinitialize()
+		{
+			TryDeinitialize();
+			TryInitialize();
+		}
+
 		protected void Awake()
 		{
 			TryInitialize();
@@ -46,19 +52,7 @@ namespace RaDataHolder
 			}
 
 			_isDestroyed = true;
-
-			_core.ClearData(true);
-			
-			OnDeinitialization();
-
-			DataSetEvent = null;
-			DataClearedEvent = null;
-			DataSetResolvedEvent = null;
-			DataClearResolvedEvent = null;
-			DataReplacedEvent = null;
-
-			_core.Dispose();
-			_core = null;
+			TryDeinitialize();
 		}
 
 		private void TryInitialize()
@@ -93,6 +87,27 @@ namespace RaDataHolder
 			_core.DataReplacedEvent += OnDataReplacedEvent;
 
 			OnInitialization();
+		}
+
+		private void TryDeinitialize()
+		{
+			if(_core == null)
+			{
+				return;
+			}
+
+			_core.ClearData(true);
+			
+			OnDeinitialization();
+
+			DataSetEvent = null;
+			DataClearedEvent = null;
+			DataSetResolvedEvent = null;
+			DataClearResolvedEvent = null;
+			DataReplacedEvent = null;
+
+			_core.Dispose();
+			_core = null;
 		}
 
 		public void EditorSetData(TData data)
